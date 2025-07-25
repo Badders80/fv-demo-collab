@@ -1,0 +1,148 @@
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: #000000;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  z-index: 1000;
+  height: 80px;
+}
+
+.navbar-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.navbar-logo {
+  display: flex;
+  align-items: center;
+}
+
+.logo {
+  height: 40px;
+  width: auto;
+}
+
+.navbar-nav {
+  display: flex;
+  align-items: center;
+  gap: 3rem;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.nav-link {
+  color: #ffffff;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 1rem;
+  transition: color 0.3s ease;
+  position: relative;
+}
+
+.nav-link:hover {
+  color: #d4a964;
+}
+
+.nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: #d4a964;
+  transition: width 0.3s ease;
+}
+
+.nav-link:hover::after {
+  width: 100%;
+}
+
+.navbar-auth {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.user-section {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.user-info {
+  color: #d4a964;
+  font-family: monospace;
+  font-size: 0.9rem;
+}
+
+.login-button, .logout-button {
+  background: #d4a964;
+  color: #000000;
+  border: 1px solid #d4a964;
+  padding: 0.75rem 1.5rem;
+  border-radius: 6px;
+  font-weight: 500;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.login-button:hover, .logout-button:hover {
+  background: #ffffff;
+  color: #000000;
+  transform: translateY(-1px);
+}
+
+/* Mobile Responsive */
+@media (max-width: 1024px) {
+  .navbar-nav {
+    position: static;
+    transform: none;
+  }
+  
+  .navbar-container {
+    flex-direction: column;
+    height: auto;
+    padding: 1rem 2rem;
+    gap: 1rem;
+  }
+  
+  .navbar {
+    height: auto;
+  }
+  
+  .navbar-nav {
+    gap: 2rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .navbar-container {
+    padding: 1rem;
+  }
+  
+  .navbar-nav {
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  
+  .navbar-auth {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .login-button {
+    padding: 0.6rem 1.2rem;
+    font-size: 0.85rem;
+  }
+}

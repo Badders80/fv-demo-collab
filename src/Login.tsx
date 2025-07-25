@@ -1,52 +1,44 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useAuth } from '@futureverse/auth-react';
+import { useNavigate } from "react-router";
+
+import type { UserSession } from '@futureverse/auth';
+import { useAuthUi } from '@futureverse/auth-ui';
 
 export default function Login() {
-  const { authClient, signIn, userSession, isFetchingSession } = useAuth();
-  const [isSigningIn, setIsSigningIn] = useState(false);
+  const { openLogin } = useAuthUi();
+  const { authClient } = useAuth();
+  const [signInState, setSignInState] = useState<null | boolean>(null);
+  const navigate = useNavigate();
 
-  const handleSignIn = async () => {
-    try {
-      setIsSigningIn(true);
-      await signIn({ authFlow: 'redirect' });
-    } catch (error) {
-      console.error('Sign in error:', error);
-      setIsSigningIn(false);
-    }
-  };
+  useEffect(() => {
+    const userStateChange = (user: UserSession | undefined) => {
+      if (user) {
+        console.log('User signed in:', user);
+        setSignInState(true);
+        navigate('/');
+      } else {
+        setSignInState(false);
+      }
+    };
+    authClient.addUserStateListener(userStateChange);
+    return () => {
+      authClient.removeUserStateListener(userStateChange);
+    };
+  }, [authClient, navigate]);
 
-  const handleSignOut = async () => {
-    try {
-      await authClient.signOutPass({ flow: 'redirect' });
-    } catch (error) {
-      console.error('Sign out error:', error);
-    }
-  };
-
-  if (isFetchingSession) {
-    return <div>Loading...</div>;
+  if (signInState === true) {
+    return <div>Redirecting, please wait...</div>;
   }
 
-  if (userSession) {
+  if (signInState === false) {
     return (
       <div>
-        <h2>Welcome!</h2>
-        <p>You are signed in with Pass</p>
-        <p>User ID: {userSession.user?.profile?.sub}</p>
-        <button onClick={handleSignOut} disabled={isSigningIn}>
-          Sign Out
-        </button>
+        <div>Not Authenticated - Please Log In...</div>
+        <button onClick={openLogin}>Log In</button>
       </div>
     );
   }
 
-  return (
-    <div>
-      <h2>Sign In with Pass</h2>
-      <p>Click the button below to sign in using Futureverse Pass</p>
-      <button onClick={handleSignIn} disabled={isSigningIn}>
-        {isSigningIn ? 'Signing In...' : 'Sign In with Pass'}
-      </button>
-    </div>
-  );
+  return <div>Authenticating...</div>;
 } 
